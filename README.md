@@ -4,7 +4,7 @@
 
 ##Implemented using javascript and jquery for the froneend
 
-##Feautures
+##Features
 
 ###->Concatenation of more than one video by taking the input from the user in a matrix form in the web browser
 
