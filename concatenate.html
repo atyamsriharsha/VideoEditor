@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+    body {margin: 0;}
+
+    ul.topnav {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+    }
+
+    ul.topnav li {float: left;}
+
+    ul.topnav li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+    ul.topnav li a:hover:not(.active) {background-color: #111;}
+
+    ul.topnav li a.active {background-color: #4CAF50;}
+
+    ul.topnav li.right {float: right;}
+
+    @media screen and (max-width: 600px){
+        ul.topnav li.right,
+        ul.topnav li {float: none;}
+    }
+
+    .button {
+    background-color: #4CAF50;
+    border: 1px solid green;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    float: left;
+    }
+
+    .button:hover{
+        background-color: #3e8e41;
+    }
+
+    input[type=text]{
+    width: 100% ;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    position: relative;
+    }
+
+    .formdiv{
+        align:center;
+        background-color: gray ;
+        position: relative;
+        display: inline-block;
+        margin: 0 auto ;
+        width: 600px ;
+        padding-left: 150px ;
+        padding-right: 150px ;
+    }
+
+    </style>
+</head>
+    <body>
+    <ul class="topnav">
+      <li><a class="active" href="concatenate.html">Concatenate</a></li>
+      <li><a href="record.html">Record</a></li>
+      <li><a href="reverse.html">Reverse</a></li>
+
+    </ul>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript">
+    var URL = window.URL || window.webkitURL ;
+    var output = [];
+    var x  ;
+    var y ;
+    var check ;
+    var playSelectedFile = function (event)
+    {
+        var file = this.files[0]
+        output.push(file.name) ;
+        var videoNode = document.getElementById("video_"+this.id);
+        var fileURL = URL.createObjectURL(file)
+        videoNode.src = fileURL
+    }
+
+    function create()
+    {
+        //console.log("hello") ;
+        x = Rows.value ;
+        y = Cols.value ;
+        var total = +x + +y ;
+        for(i=0;i<x;i++)
+        {
+            var smalldiv = document.createElement("div") ;
+            smalldiv.id = "smalldiv"
+            for(j=0;j<y;j++)
+            {
+                var input=document.createElement('input');
+                input.type="file";
+                input.accept = "video/*" ;
+                input.id = i + "_" + j ;
+                input.addEventListener('change', playSelectedFile, false);
+                smalldiv.appendChild(input);
+                var input1 = document.createElement('input') ;
+                input1.type = "checkbox" ;
+                input1.id = "checkbox" ;
+                input1.addEventListener('change',function(event){
+                    if(input1.checked)
+                    {
+                        check = i+j
+                    }
+                });
+                smalldiv.appendChild(input1) ;
+             var video = document.createElement('video');
+                video.controls = true;
+                video.autoPlay = true;
+                video.width=300;
+                video.height=250;
+               // video.poster="3.jpg";
+                video.id = "video_"+i + "_" + j ;
+                smalldiv.appendChild(video);
+/*                var br = document.createElement("br") ;
+                smalldiv.appendChild(br) ;
+*/            }
+            document.getElementById('target_div').appendChild(smalldiv) ;
+/*            var br1 = document.createElement("br") ;
+            smalldiv.appendChild(br1) ;
+*/
+        }
+    }
+
+/*    var parametres = {
+        "Rows":x,
+        "Cols":y
+    } ;
+*/
+    function concatenate()
+    {
+        console.log(output) ;
+        var ans = "'["
+        for(i=0;i<output.length;i++)
+        {
+            ans = ans + '"' + output[i] + '"' + ","
+        }
+        ans = ans + "]'"
+        console.log(ans) ;
+        var data = {"output":ans,"Rows":x,"Cols":y,"Flag":0};
+        $.post('http://127.0.0.1:5000/server1',data) ;
+        console.log(check) ;
+    }
+
+    function invert()
+    {
+        console.log(x) ;
+        console.log(y) ;
+/*        console.log(output) ;
+*/        var ans = "'["
+        for(i=0;i<output.length;i++)
+        {
+            ans = ans + '"' + output[i] + '"' + ","
+        }
+        ans = ans + "]'"
+        console.log(ans) ;
+        var data = {"output":ans,"Rows":x,"Cols":y,"Flag":1};
+        $.post('http://127.0.0.1:5000/server1',data) ;
+        console.log("ended") ;
+    }
+
+    </script>
+
+    <div class="formdiv">
+    <form>
+        <label for="Rows">Rows</label>
+        <input type="text" id="Rows">
+
+        <label for="Cols">Cols</label>
+        <input type="text" id="Cols">
+
+        <input type="button" onclick="create()" value="create" class="button" />
+        <input type="button" onclick="concatenate()" value="concatenate" class="button" />
+        <input type="button" onclick="invert()" value="invert" class="button">
+    </form>
+    </div>
+    <div id="target_div"></div>
+</body>
+</html>
