@@ -2,6 +2,11 @@ import numpy as np
 import cv2
 import time
 
+
+VideoName = sys.argv[1]
+fileName = sys.argv[2]
+
+
 cap = cv2.VideoCapture("output.avi")
 fourcc = cv2.cv.CV_FOURCC(*'XVID')
 out = cv2.VideoWriter('output2.avi',fourcc, 20.0, (640,480))

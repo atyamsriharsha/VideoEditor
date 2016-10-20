@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {margin: 0;}
+
+ul.topnav {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+ul.topnav li {float: left;}
+
+ul.topnav li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+ul.topnav li a:hover:not(.active) {background-color: #111;}
+
+ul.topnav li a.active {background-color: #4CAF50;}
+
+ul.topnav li.right {float: right;}
+
+@media screen and (max-width: 600px){
+  ul.topnav li.right,
+  ul.topnav li {float: none;}
+}
+
+.button {
+  background-color: #4CAF50;
+  border: 1px solid green;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.button:hover{
+  background-color: #3e8e41;
+}
+
+</style>
+</head>
+<body>
+
+  <ul class="topnav">
+    <li><a  href="concatenate.html">Concatenate</a></li>
+    <li><a href="record.html">Record</a></li>
+    <li><a class="active" href="reverse.html">Reverse</a></li>
+
+  </ul>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script type="text/javascript">
+    function render(){
+      // console.log("hello");
+      var VideoName = document.getElementById("input1") ;
+      VideoName = VideoName.files[0].name ;
+      console.log(VideoName);
+      var fileName = document.getElementById('input2') ;
+      fileName = fileName.files[0].name ;
+      console.log(fileName) ;
+      var data = {"VideoName":VideoName,"fileName":fileName} ;
+      $.post('http://127.0.0.1:5000/render',data) ;
+    }
+  </script>
+
+  <div>
+    <form>
+      <input type="file" accept="video/*" value="Browse" id="input1"/>
+      <input type="file" accept="text/*" value="Browse" id="input2"/>
+      <input type="button" onclick="render()" value="Submit" class="button"/>
+    </form>
+  </div>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</body>
+</html>

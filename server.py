@@ -35,7 +35,7 @@ def adding():
 	for x in xrange(len(finalvalues)):
 		Names = Names + ',' + str(finalvalues[x])
 	Names = Names[1:]
-	os.system('python concatenation.py ' + Names + ' ' + str(rows) + ' ' + str(cols)+ ' '+str(Flag))
+	os.system('python concatenation.py ' + Names + ' ' + str(rows) + .,' ' + str(cols)+ ' '+str(Flag))
 	#print Names
 	#print finalvalues,rows,cols
 	return "hello"
@@ -51,6 +51,22 @@ def Reverse():
 	name = request.form
 	filename = name['output']
 	os.system('python reverse.py ' + str(filename))
+
+@app.route('/render',methods=['GET','POST'])
+def Render():
+	name = request.form
+	VideoName = name['VideoName']
+	fileName = name['fileName']
+	os.system('python dynamicrendering.py ' + str(VideoName) + ' '+ str(fileName))
+
+@app.route('/slide',methods=['GET','POST'])
+def Slide():
+	name = request.form
+	filename = name['filename']
+	start = name['start']
+	end = name['end']
+	matter = name['matter']
+	os.system('python writingtext.py '+ str(filename) + ' ' + str(start)+ ' '+ str(end) + ' ' + str(matter))
 
 
 if __name__ == '__main__':

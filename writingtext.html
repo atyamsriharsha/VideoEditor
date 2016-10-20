@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <title>
+      Adding a Slide to a Video
+    </title>
+  </head>
+  <body>
+    <script type="text/javascript">
+      var URL = window.URL || window.webkitURL ;
+      var filename ;
+      var playSelectedFile = function(event){
+          var file = this.files[0] ;
+          filename = file.name ;
+          var videoNode = document.getElementById("myVideo");
+          var fileURL = URL.createObjectURL(file) ;
+          videoNode.src = fileURL ;
+      }
+      function start(){
+        var smalldiv = document.getElementById('maindiv') ;
+        var input=document.createElement('input');
+        input.type="file";
+        input.accept = "video/*" ;
+        input.id = "myInput" ;
+        input.addEventListener('change', playSelectedFile, false);
+        smalldiv.appendChild(input);
+        var video = document.createElement('video');
+        video.controls = true;
+        video.autoPlay = true;
+        video.width=300;
+        video.height=250;
+        video.id = "myVideo" ;
+        smalldiv.appendChild(video);
+      }
+      function submit(){
+        var start = document.getElementById('start').value ;
+        var end = document.getElementById('end').value ;
+        var matter = document.getElementById('matter').value ;
+        var data = {"filename":filename,"start":start,"end":end,"matter":matter } ;
+        $.post('http://127.0.0.1:5000/slide',data) ;
+
+      }
+    </script>
+    <div class="container" id="maindiv">
+      <input type="button" name="name" value="start" onclick="start()" id="myBtn"><br>
+      Start:<br>
+      <input type="text" name="start" id="start"><br>
+      End:<br>
+      <input type="text" name="end" id="end" style="line-width:1px ;"><br>
+      Matter:<br>
+      <input type="text" name="matter" id="matter" style="line-height:100px ;">
+      <input type="button" name="submit" value="submit" onclick="submit()">
+    </div>
+  </body>
+</html>
